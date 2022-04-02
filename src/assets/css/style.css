@@ -2,7 +2,9 @@
   max-height: 89vh;
 }
 .card table{
+  height: 68vh !important;
   max-height: 68vh;
+  min-height: 68vh !important;
   overflow-y: scroll !important;
   min-height: 100% !important;
   display: block;

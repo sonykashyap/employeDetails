@@ -77,7 +77,7 @@ export default {
       sortDefault: '',
       sortDescending: '',
       sortBy: '',
-      sortOptions: ['Sort By','id','name'],
+      sortOptions: ['Sort By','id','name', 'Created at'],
       selectedSortOption: 'Sort By',
       base_url: "https://620dfdda20ac3a4eedcf5a52.mockapi.io/api/employee?",
       countryNames: [],
@@ -93,11 +93,9 @@ export default {
   },
   methods: {
     selectAll(){
-      console.log("Called", this.selectAllEmp);
       if(this.selectAllEmp){
         const selected = this.empData.map((u) => u.id);
         this.selected =selected;
-        console.log("selected:", this.selected);
       } else{
         this.selected = [];
       }
@@ -106,18 +104,40 @@ export default {
       console.log(page)
       this.currentPage = page;
     },
+    // Get all unique countries for "Filter by country" dropdown
+    getAllCountryNames(){
+      console.log("Inside GeAtALl countries");
+      this.countryNames = this.empData.map(el=>{
+        return el.country;
+      });
+      this.countryNames = [...new Set(this.countryNames)];
+    },
+    //Sort columns functionality
     changeSortOrderHandler(sortValue){
       if(sortValue){
+        if(sortValue == "Created at"){
+          sortValue = "createdAt";
+        }
         this.base_url = this.base_url + "&sortBy="+ sortValue+"&order=desc";
         console.log("Base is ", this.base_url);
       }
       this.getAllEmployeeData();
     },
-    filterByCountryHandler(filterCountryName){
-        if(filterCountryName){
-        this.base_url = this.base_url + "&country="+ filterCountryName;
-      }
 
+    filterByCountryHandler(filterCountryName){
+      if(filterCountryName){
+        console.log("Inside filter country name");
+        this.base_url = this.base_url + "&country="+ filterCountryName;
+        console.log("Base URL:", this.base_url);
+        // axios.get(this.base_url)
+        // .then(res => {
+        //   this.empData = res.data;
+        //   // this.countryNames = res.data.country;
+        //   this.countryNames = this.empData.map(el=>{
+        //     return el.country;
+        //   });
+        // });
+      }
       this.getAllEmployeeData();
     },
 
@@ -127,18 +147,16 @@ export default {
       }
     },
     getAllEmployeeData(){
-      // if(value){
-      //   this.base_url = this.base_url + "&sortBy=" + value+"&order=desc";
-      // }
-      // return ;
+
       axios.get(this.base_url)
       .then(res => {
         this.empData = res.data;
-        this.countryNames = res.data.country;
-          this.countryNames = this.empData.map(el=>{
-            return el.country;
-          });
+        if(this.countryNames.length == 0){
+          console.log("Inside the if condition in mounted");
+          this.getAllCountryNames();
+        }
       });
+      this.base_url = "https://620dfdda20ac3a4eedcf5a52.mockapi.io/api/employee?";
     },
     // sortHandler(){
     //   console.log("Sorting");
