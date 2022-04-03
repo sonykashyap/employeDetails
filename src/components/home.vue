@@ -9,7 +9,7 @@
       <input type="text" class="form-control w-200" v-model="filter" placeholder="Filter">
     </div>
 
-    <div id="table" class="col-xs-12 table-responsive">
+    <div id="table" name="datatable" class="col-xs-12 table-responsive">
         <bootstrap-3-datatable :columns="columns" :data="rows" :per-page="per_page" v-model="page" :filter="filter">
             <template scope="{ row }">
                 <tr>
@@ -38,7 +38,7 @@
         </bootstrap-3-datatable>
     </div>
     <div class="col-xs-12 form-inline">
-        <bootstrap-3-datatable-pager v-model="page" type="abbreviated" :per-page="per_page"></bootstrap-3-datatable-pager>
+        <bootstrap-3-datatable-pager name="datatable" v-model="page" type="abbreviated" :per-page="per_page"></bootstrap-3-datatable-pager>
     </div>
   </div>
 </div>
@@ -80,23 +80,15 @@ export default {
       axios.get("https://620dfdda20ac3a4eedcf5a52.mockapi.io/api/employee/"+ id+ "/checkin")
       .then(res=>{
         this.empCheckins = res.data;
-        console.log("All checking data is ", this.empCheckins);
       });
       this.expanded = id;
     },
-    filterHandler(){
-      console.log("Filter is ", this.filter);
-    },
+    //Get the list of employee data
     getAllEmployeeData(){
 
       axios.get(this.base_url)
       .then(res => {
         this.rows = res.data;
-        console.log("Data is ", this.rows);
-        // if(this.countryNames.length == 0){
-        //   console.log("Inside the if condition in mounted");
-        //   this.getAllCountryNames();
-        // }
       });
       // this.base_url = "https://620dfdda20ac3a4eedcf5a52.mockapi.io/api/employee?";
     },
@@ -104,7 +96,7 @@ export default {
 }
 
 </script>
-<style scoped>
+<style>
   .width-250{
     width: 200px;
   }
